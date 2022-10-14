@@ -7,7 +7,7 @@ const dinero = new Intl.NumberFormat('es-MX', {
     currency: 'MXN'
 })
 
-var establecerDatos = function () {
+let establecerDatos = function () {
     primerInteres = 0, primerImpuesto = 0, primerCapital = 0, primerInsoluto = 0, primerFechaPago = true
     acumIntereses = 0, acumImpuestos = 0, acumCapital = 0
 
@@ -27,19 +27,21 @@ var establecerDatos = function () {
     plazo = document.getElementById('plazo').value
     tasaAnual = document.getElementById('interes').value
     fechaInicio = new Date(document.getElementById('fecha').value)
-    fechaInicio.setDate(fechaInicio.getDate() + 1) //fecha actual
+    fechaInicio.setDate(fechaInicio.getDate() + 1) 
 
-    let plazoMensual = document.getElementById('mensual').checked
+
+    
+    let plazoMensual = document.getElementById('mensual').checked   
     let plazoAnual = document.getElementById('anual').checked
 
-    if ( plazoMensual === true ) {
+    if ( plazoMensual === true ) {    
         this.plazo = plazo
-    } else if ( plazoAnual === true ) {
+    } else if ( plazoAnual === true ) {  
         this.plazo = plazo * 12
     } else {
-        alert('No seleccionaste ningún tipo de plazo')
+        alert('No seleccionaste ningún tipo de plazo')  
     }
-
+ 
     switch ( periodo ) {
         case 'semanal':
             let fechaFin = new Date(fechaInicio)
@@ -59,6 +61,8 @@ var establecerDatos = function () {
             break    
     }
 }
+
+
 localStorage.setItem("nombre", nombre, "fecha", fecha, "monto", monto);
 
 let datos = [{ id: 1, nombre: "Mariana", fecha: "11/5/2022", monto: "15000"},
@@ -74,12 +78,11 @@ let mensaje = localStorage.getItem("datos");
 console.log(JSON.parse(mensaje));
 
 
-for (let i = 0; i < localStorage.lenght; i++) {
+for (let i = 0; i < localStorage.lenght; i++) {   
     let clave = localStorage.key(i);
     console.log("Clave: "+ clave);
     console.log("Valor: "+ localStorage.getItem(clave));
 }
-
 
 localStorage.removeItem('');
 sessionStorage.removeItem('');
@@ -104,7 +107,7 @@ function PagoMensual () {
 
 function calcularTotalPrestamo () {
     let totalPrestamo = 0
-    for ( let i = 0; i < totalPagos; i++ ) {
+    for ( let i = 0; i < totalPagos; i++ ) { 
         totalPrestamo += mensualidad
     }
     return totalPrestamo
@@ -164,17 +167,17 @@ function simularPrestamo () {
     PagoMensual()
     calcularTotalPrestamo()
 
-    var columnas = [ 'No.', 'Fecha', 'Mensualidad', 'Intereses', 'Impuestos', 'Capital', 'Insoluto' ]
+    let columnas = [ 'No.', 'Fecha', 'Mensualidad', 'Intereses', 'Impuestos', 'Capital', 'Insoluto' ]
 
-    var amortizaciones = document.getElementById('amortizaciones')
-    var tabla = document.createElement('table')
-    var cabeceraTabla = document.createElement('thead')
-    var cuerpoTabla = document.createElement('tbody')
-    var pieTabla = document.createElement('tfoot')
-    var fila = document.createElement('tr')
+    let amortizaciones = document.getElementById('amortizaciones')
+    let tabla = document.createElement('table')
+    let cabeceraTabla = document.createElement('thead')
+    let cuerpoTabla = document.createElement('tbody')
+    let pieTabla = document.createElement('tfoot')
+    let fila = document.createElement('tr')
 
     
-    for ( let j = 0; j < columnas.length; j++ ) {
+    for ( let j = 0; j < columnas.length; j++ ) {    
         let celda = document.createElement('td')
         let texto = columnas[j]
         let textoCelda = document.createTextNode(texto)
@@ -184,15 +187,15 @@ function simularPrestamo () {
     cabeceraTabla.appendChild(fila)
 
     
-    for ( let i = 0; i < totalPagos; i++ ) {
+    for ( let i = 0; i < totalPagos; i++ ) {    
         let intereses = Intereses(), impuestos = Impuestos(), capital = Capital(), insoluto = SaldoInsoluto()
         acumIntereses += intereses
         acumImpuestos += impuestos
         acumCapital += capital
 
 
-        var fila = document.createElement('tr')
-        for ( let j = 0; j < columnas.length; j++ ) {
+        let fila = document.createElement('tr')
+        for ( let j = 0; j < columnas.length; j++ ) {   
             let celda = document.createElement('td')
             let texto
 
@@ -234,14 +237,14 @@ function simularPrestamo () {
                     texto = null
                     break
             }
-            var textoCelda = document.createTextNode(texto)
+            let textoCelda = document.createTextNode(texto)
             celda.appendChild(textoCelda)
             fila.appendChild(celda)
         }
         cuerpoTabla.appendChild(fila)
     }
-
-    for ( let j = 0; j < columnas.length; j++ ) {
+    
+    for ( let j = 0; j < columnas.length; j++ ) {   
         let celda = document.createElement('td')
         let texto
         switch (columnas[j] ) {
@@ -272,3 +275,33 @@ function simularPrestamo () {
     amortizaciones.appendChild(tabla)
 
 }
+let guardar = document.getElementById("guardar");
+guardar.addEventListener("click", () => {
+    Swal.fire({
+        title: 'Desea guardar los cambios?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        denyButtonText: `Deshacer`,
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+          Swal.fire('Guardado!', '', 'exitosamente')
+        } else if (result.isDenied) {
+          Swal.fire('Los cambios no han sido guardados', '', 'info')
+        }
+      });
+})
+
+const DateTime = luxon.DateTime;
+
+const now = DateTime.now();
+console.log( now.toString());
+
+const dt = DateTime.now();
+console.log( dt.zoneName )
+
+dt.toLocaleString();
+dt.toLocaleString(DateTime.DATE_FULL);
+dt.toLocaleString(DateTime.TIME_SIMPLE);
+console.log( dt.toLocaleString(DateTime.DATETIME_SHORT) )
